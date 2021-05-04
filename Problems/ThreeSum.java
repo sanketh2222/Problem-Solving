@@ -2,10 +2,10 @@ import java.util.stream.Collector;
 // import java.util.stream.Collectors;
 import java.util.*;
 
-public class ThreeSum {
+class ThreeSum {
 
     public void createTempset() {
-        
+
     }
 
     public List<List<Integer>> threeSum(Integer[] nums) {
@@ -14,18 +14,17 @@ public class ThreeSum {
 
         Set<String> tempset = new HashSet<>();
 
-        for (int i = 0; i < nums.length - 1; i++) {
-            for (int j = i + 1; j < nums.length - 1; j++) {
-                for (int k = j + 1; k < nums.length - 1; k++) {
+        for (int i = 0; i <=nums.length - 1; i++) {
+            for (int j = i + 1; j <= nums.length - 1; j++) {
+                for (int k = j + 1; k <= nums.length - 1; k++) {
                     if (nums[i] + nums[j] + nums[k] == 0//3!
                             && !tempset.contains(nums[i] + " " + nums[j] + " " + nums[k] )//0 0 0//
-                            && !tempset.contains(nums[i] + " " + nums[j] + " " + nums[k])
-                            && !tempset.contains(nums[i] + " " + nums[k] + " " + nums[k])
-                            && !tempset.contains(nums[i] + " " + nums[k] + " " + nums[k])
+                            && !tempset.contains(nums[i] + " " + nums[k] + " " + nums[j])
+                            && !tempset.contains(nums[j] + " " + nums[k] + " " + nums[i])
                             && !tempset.contains(nums[j] + " " + nums[i] + " " + nums[k])
-                            && !tempset.contains(nums[j]+ " " + nums[i] + " " + nums[k])//
-                            && !tempset.contains(nums[j] + " " + nums[k] + " " + nums[k])//1 1 1
-                            && !tempset.contains(nums[j] + " " + nums[k] + " " + nums[k])) {
+                            && !tempset.contains(nums[k] + " " + nums[i] + " " + nums[j])
+                            && !tempset.contains(nums[k]+ " " + nums[j] + " " + nums[i])//
+                    ) {
                         // System.out.printf("rsult is"+nums[i]+""+nums[j]+""+nums[k]);
 
                         temp.add(nums[i]);
@@ -40,7 +39,7 @@ public class ThreeSum {
                         // temp1 = temp.stream().collect(Collectors.toList());//O(1)   {}()
                         // temp1 = new ArrayList<>();
                         // temp1.addAll(temp);
-                       
+
                         // result1.
                         // temp1=temp;
                         // // System.out.printf("temp is"+temp);
@@ -63,15 +62,7 @@ public class ThreeSum {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        // 6
-        // -1 0 1 2 -1 -4
 
-        // -1 0 1
-        // -1 -1 2
-
-        // -1 0 1 
-        // -1 2 -1
-        // 0 1 -1
         Integer n = scanner.nextInt();
         Integer nums[] = new Integer[n];
         for(Integer i = 0 ; i < n ;i++) {
