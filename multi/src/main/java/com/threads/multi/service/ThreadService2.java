@@ -67,7 +67,7 @@ public class ThreadService2 implements Runnable {
                 counter2++;
                 isOdd = false;
                 if (isOdd){
-                    wait();
+                    wait(); 
                     isOdd=true;
                 }
                 
