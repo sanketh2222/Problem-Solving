@@ -71,3 +71,18 @@ Sample Output 2
 Explanation 2
 The element 0 is not found in the array.
 
+Vishva:: proposed Logic/Thoughts
+
+this will lead to direct solution::
+
+
+
+1. Since the input is a rotated sorted array we need to make benefit of this point [ start__ =a[start]  end__= a[length -1]
+2. Primary aim should be to identify the pivot of the array (To Formulate:: the very integer after which the values go decreasing PS: This will also be the max value in the array , and very next index value will be the sub pivot) (store pivot = a[max] & sub_pivot = a[max +1 ] )
+3. Once pivots are identified we can check if the value given to us is greater than pivot or smaller than sub_pivot Integer. Both cases return -1 simply ( Best case Time complexity O(N))
+4. If either pivot/ subpivot matched return respective indices
+
+5. Going forward if value is greater than sub_pivot and lesser than end__ then search it in sub_pivot +i indices only (use binary search so Complexity: O(Log2(N-sub_pivot index))
+6. On contrary if value is lesser than pivot and greater than start__ then search it sub_pivot +i indices only (use binary search so Complexity: O(Log2(N-sub_pivot index))
+
+
