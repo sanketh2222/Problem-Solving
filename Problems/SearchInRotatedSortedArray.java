@@ -16,18 +16,24 @@ public class SearchInRotatedSortedArray {
 //        5. Going forward if value is greater than sub_pivot and lesser than end__ then search it in sub_pivot +i indices only (use binary search so Complexity: O(Log2(N-sub_pivot index))
 //        6. On contrary if value is lesser than pivot and greater than start__ then search it sub_pivot +i indices only (use binary search so Complexity: O(Log2(N-sub_pivot index))
 
+        end = nums.length-1;
 
         //array will look like : [7(start) , 8, 10, 11, 15 (Pivot) ,2 (subPivot), 3, 5 , 6 (end) ]
         if(!pivotExists) {
             pivot = getPivotData(nums, end, pivot);
             pivotExists= true;
         }
+
         subPivot= pivot +1 ;
 
         if(target == nums[pivot])
             return pivot;
         else if (target == nums[subPivot])
             return subPivot;
+        else if (target == nums[start])
+            return start;
+        else if (target == nums[end])
+            return end;
         else  if (target > nums[pivot] || target < nums[subPivot])
             return -1;
         else if (target  < nums[pivot] ){
@@ -50,10 +56,10 @@ public class SearchInRotatedSortedArray {
             if(target == nums[mid]){
                 return mid;
             }else if(target > nums[mid]){
-                start = mid; //mid +1;
+                start = mid +1;
                 mid= (start + end)/2;
             }else if(target < nums[mid]){
-                end = mid;//mid -1;
+                end = mid -1;
                 mid= (start + end)/2;
             }
         }
@@ -61,7 +67,6 @@ public class SearchInRotatedSortedArray {
     }
 
     private int getPivotData(int[] nums, int endIndex, int pivot) {
-        endIndex = nums.length-1;
         System.out.println("endIndex "+endIndex);
         int tempMax=0;
         // find index of max Value
