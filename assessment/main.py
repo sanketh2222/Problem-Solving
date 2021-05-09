@@ -37,7 +37,7 @@ class XMemeAssessment(TestCase):
         os.system('mongo Xmeme --eval "db.dropDatabase()"')
         unittest.TestCase.__init__(self, *args, **kwargs)
         self.HEADERS = {"Content-Type": "application/json"} # "X-Firebase-Auth": "INTERNAL_IMPERSONATE_USER_" + str(user),
-        self.localhost = 'http://localhost:8080/'
+        self.localhost = 'http://localhost:8081/'
 
         self.SAMPLE_URL = 'https://cwod-assessment-images.s3.ap-south-1.amazonaws.com/images/'
         self.FIRST_POST_ID = ''
