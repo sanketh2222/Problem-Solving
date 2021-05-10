@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Provider;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,7 +41,7 @@ public class MemeServiceImpl implements MemeServices {
         
         
         long total = memeRepository.findAll().stream().count();
-        meme.setMid(Long.toString(total));
+        meme.setMid(total);
         mongoTemplate.save(meme);
         return Long.toString(total);
     }
@@ -61,11 +62,13 @@ public class MemeServiceImpl implements MemeServices {
 
     @Override
     public List<Meme> getMemes() {
-        List<Meme> memeList =   memeRepository.findAll().stream().limit(100).collect(Collectors.toList());
+        // List<Meme> memeList =   memeRepository.findAll().stream().limit(100).collect(Collectors.toList());
+        List<Meme> memeList1 =  memeRepository.findAll().stream().sorted(Comparator.comparing(Meme::getMid)
+                    .reversed()).limit(100).collect(Collectors.toList());
         // memeRepository.findAll().sort(c);
         // List<Meme> finalList = memeList.stream().filter(meme -> 
         //         (Integer.parseInt(meme.getMid()) <= 100)).collect(Collectors.toList());
-        log.info("len of meme list is "+memeList.size());
-        return memeList;
+        log.info("len of meme list is "+memeList1.size());
+        return memeList1;
     }
 }

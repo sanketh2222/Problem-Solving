@@ -10,7 +10,7 @@ public class MemeEntity {
 
 //    @Id
     @NonNull
-    private String mid;
+    private Long mid;
 
     @NonNull
     private  String name;

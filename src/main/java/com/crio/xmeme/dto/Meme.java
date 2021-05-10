@@ -7,7 +7,7 @@ import lombok.Data;
 public class Meme {
 
 
-    private String mid;
+    private long mid;
     private  String name;
     private  String url;
     private  String caption;
