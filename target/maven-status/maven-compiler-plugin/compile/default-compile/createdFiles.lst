@@ -1,10 +1,10 @@
+com\crio\xmeme\controller\MemeController.class
+com\crio\xmeme\repository\MemeRepository.class
+com\crio\xmeme\entity\MemeEntity.class
 com\crio\xmeme\exceptions\MemeNotFoundException.class
 com\crio\xmeme\service\MemeServiceImpl.class
-com\crio\xmeme\controller\MemeController.class
 com\crio\xmeme\exceptions\MemeAlreadyExists.class
-com\crio\xmeme\repository\MemeRepository.class
 com\crio\xmeme\dto\Meme.class
 com\crio\xmeme\service\MemeServices.class
 com\crio\xmeme\XmemeApplication.class
-com\crio\xmeme\entity\MemeEntity.class
 com\crio\xmeme\advice\ControllerAdvise.class
