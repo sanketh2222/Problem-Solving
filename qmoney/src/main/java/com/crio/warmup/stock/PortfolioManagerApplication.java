@@ -3,7 +3,10 @@ package com.crio.warmup.stock;
 
 
 import com.crio.warmup.stock.dto.AnnualizedReturn;
+import com.crio.warmup.stock.dto.Candle;
 import com.crio.warmup.stock.dto.PortfolioTrade;
+import com.crio.warmup.stock.dto.TiingoCandle;
+import com.crio.warmup.stock.dto.TotalReturnsDto;
 import com.crio.warmup.stock.log.UncaughtExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -18,8 +21,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,7 +56,7 @@ public class PortfolioManagerApplication {
     //  FileWriter fileWriter = new FileWriter(file);
      
      PortfolioTrade[] trade = objectMapper.readValue(file, PortfolioTrade[].class);
-
+     
      List<String> trades = new ArrayList<>();
      for (PortfolioTrade portfolioTrade : trade){
         trades.add(portfolioTrade.getSymbol());
@@ -65,6 +73,11 @@ public class PortfolioManagerApplication {
 
 
 
+
+
+  // TODO: CRIO_TASK_MODULE_REST_API
+  //  Find out the closing price of each stock on the end_date and return the list
+  //  of all symbols in ascending order by its close value on end date.
 
   // Note:
   // 1. You may have to register on Tiingo to get the api_token.
@@ -135,9 +148,58 @@ public class PortfolioManagerApplication {
         lineNumberFromTestFileInStackTrace});
   }
 
+  public static List<String> sortStocks(Map stocksMap){
+    TreeMap<Double,String> stockMap = new TreeMap<>();
+    List<String> stocksList = new ArrayList<>();
+    stockMap.putAll(stocksMap);
+    // for (Map.Entry<Double,String> entry : stockMap.entrySet()){
+    //     stocksList.add
+    // }
+    stocksList.addAll(stockMap.values());
+
+    return stocksList;
+  }
+
 
   // Note:
   // Remember to confirm that you are getting same results for annualized returns as in Module 3.
+  public static List<String> mainReadQuotes(String[] args) throws IOException, URISyntaxException {
+    Map<Double,String> stocksMap = new HashMap<>();
+    File file = resolveFileFromResources(args[0]);
+    String uriTemplate = "https://api.tiingo.com/tiingo/daily/$SYMBOL/prices?"
+        + "startDate=$STARTDATE&endDate=$ENDDATE&token=$APIKEY";
+
+    // Candle[] candles;
+    RestTemplate rest = new RestTemplate();
+    ObjectMapper mapper = getObjectMapper();
+    PortfolioTrade[] portfolioTrade =  mapper.readValue(file, PortfolioTrade[].class);
+    // List<String> trades = new ArrayList<>();
+    for (PortfolioTrade trade: portfolioTrade){
+      
+      String url = uriTemplate.replace("$SYMBOL", trade.getSymbol())
+        .replace("$STARTDATE", trade.getPurchaseDate().toString())
+        .replace("$ENDDATE", args[1])
+        .replace("$APIKEY", "0175e650eb18193394fdc2c225b0c0ba954fa0a4");
+        
+        TiingoCandle[] candles = rest.getForObject(url, TiingoCandle[].class);
+        System.out.println("candle closing price for "+trade.getSymbol() + "is "+candles[candles.length-1].getClose());
+        stocksMap.put(candles[candles.length-1].getClose(), trade.getSymbol());
+        
+        //EXTRACT THE CLOSING PRICE FOR EACH SYMBOL
+        //Then sort them based on the closing price
+      
+    }
+    
+    return sortStocks(stocksMap);
+
+  }
+
+
+
+
+
+
+
 
 
 
@@ -147,6 +209,8 @@ public class PortfolioManagerApplication {
 
     printJsonObject(mainReadFile(args));
 
+
+    printJsonObject(mainReadQuotes(args));
 
 
   }
