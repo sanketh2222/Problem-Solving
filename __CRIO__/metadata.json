@@ -1,6 +1,7 @@
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   "module_id": "ME_QMONEY_MODULE_JSON_PARSING",
 =======
   "module_id": "ME_QMONEY_MODULE_REST_API",
@@ -8,5 +9,8 @@
 =======
   "module_id": "ME_QMONEY_MODULE_CALCULATIONS",
 >>>>>>> da02eb22415b3f7426400ece6f9061b703013f23
+=======
+  "module_id": "ME_QMONEY_MODULE_REFACTOR",
+>>>>>>> add180c925b3041850f5d1030b4f4136a92b6bcd
   "me_id": "ME_QMONEY"
 }
