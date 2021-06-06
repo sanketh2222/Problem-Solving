@@ -53,7 +53,7 @@ import org.springframework.web.client.RestTemplate;
 
 public class PortfolioManagerApplication {
 
-  private  PortfolioManager portfolioManager;
+  private static PortfolioManager portfolioManager;
 
   //
   public static List<String> mainReadFile(String[] args) throws IOException, URISyntaxException {
@@ -217,10 +217,13 @@ public class PortfolioManagerApplication {
   // as in Module 3.
 
   public static List<AnnualizedReturn> mainCalculateReturnsAfterRefactor(String[] args) throws Exception {
-    String file = args[0];
+    File file = resolveFileFromResources(args[0]);
+
     LocalDate endDate = LocalDate.parse(args[1]);
-    String contents = readFileAsString(file);
+    // String contents = readFileAsString(file);
     ObjectMapper objectMapper = getObjectMapper();
+    PortfolioTrade[] portfolioTrades = objectMapper.readValue(file, PortfolioTrade[].class);
+
     return portfolioManager.calculateAnnualizedReturn(Arrays.asList(portfolioTrades), endDate);
   }
 
@@ -231,7 +234,7 @@ public class PortfolioManagerApplication {
   public static void main(String[] args) throws Exception {
     Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
     ThreadContext.put("runId", UUID.randomUUID().toString());
-
-    // printJsonObject(mainCalculateReturnsAfterRefactor(args));
+    String[] s = {"trades.json","2019-12-12"};
+    mainCalculateReturnsAfterRefactor(s);
   }
 }

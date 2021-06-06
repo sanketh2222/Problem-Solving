@@ -18,8 +18,7 @@ public interface PortfolioManager {
   // The reason is, this service is going to get exposed as a library in future.
 
   List<AnnualizedReturn> calculateAnnualizedReturn(List<PortfolioTrade> portfolioTrades,
-      LocalDate endDate)
-  ;
-  //CHECKSTYLE:ON
+      LocalDate endDate);
+
 }
 
