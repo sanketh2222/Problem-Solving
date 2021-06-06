@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -116,22 +117,25 @@ public class PortfolioManagerImpl implements PortfolioManager {
 
   @Override
   public List<AnnualizedReturn> calculateAnnualizedReturn(List<PortfolioTrade> portfolioTrades, LocalDate endDate) {
-    // TODO Auto-generated method stub
-    // buildUri(symbol, startDate, endDate)
+
     List<AnnualizedReturn> annualizedReturns = new ArrayList<>();
     for (PortfolioTrade trade : portfolioTrades) {
+
       try {
+        
         Double buyPrice = getBuyPrice(trade, endDate.toString());
         Double sellPrice = getSellPrice(trade, endDate.toString());
         annualizedReturns.add(calculateSingleAnnualizedReturns(endDate, trade, buyPrice, sellPrice));
+
       } catch (URISyntaxException | IOException e) {
+
         System.out.println("Exception Occured while finding buy or sell price");
         e.printStackTrace();
       }
-      // buildUri(trade.getSymbol(), trade.getPurchaseDate(), endDate);
+     
     }
-    List<AnnualizedReturn> sAnnualizedReturns = annualizedReturns.stream()
-        .sorted(Comparator.comparing(AnnualizedReturn::getAnnualizedReturn).reversed()).collect(Collectors.toList());
-    return sAnnualizedReturns;
+   
+    Collections.sort(annualizedReturns, getComparator());
+    return annualizedReturns;
   }
 }
