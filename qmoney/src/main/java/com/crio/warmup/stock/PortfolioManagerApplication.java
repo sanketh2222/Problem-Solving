@@ -91,7 +91,7 @@ public class PortfolioManagerApplication {
         functionNameFromTestFileInStackTrace, lineNumberFromTestFileInStackTrace });
   }
 
-  public static List<String> sortStocks(Map stocksMap) {
+  public static List<String> sortStocks(Map<Double, String>  stocksMap) {
     TreeMap<Double, String> stockMap = new TreeMap<>();
     List<String> stocksList = new ArrayList<>();
     stockMap.putAll(stocksMap);
@@ -238,3 +238,36 @@ public class PortfolioManagerApplication {
     mainCalculateReturnsAfterRefactor(s);
   }
 }
+
+// public class PortfolioManagerApplication {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//   public static void main(String[] args) throws Exception {
+//     Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
+//     ThreadContext.put("runId", UUID.randomUUID().toString());
+
+
+
+
+//   }
+// }
+
