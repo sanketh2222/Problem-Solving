@@ -68,7 +68,7 @@ public class AlphavantageService implements StockQuotesService {
 
     AlphavantageDailyResponse alphavantageDailyResponse = restTemplate.getForObject(buildURI(symbol),
         AlphavantageDailyResponse.class);
-
+    System.out.println("response is "+alphavantageDailyResponse);
     Map<LocalDate, AlphavantageCandle> dailyresponsemap = alphavantageDailyResponse.getCandles();// Map<LocalDate,AlphavantageCandle>
     for (Map.Entry<LocalDate, AlphavantageCandle> response : dailyresponsemap.entrySet()) {
       if (response.getKey().compareTo(from) >= 0 && response.getKey().compareTo(to) <= 0) {

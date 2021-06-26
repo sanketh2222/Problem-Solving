@@ -53,11 +53,11 @@ public class TiingoService implements StockQuotesService {
   }
 
   protected String buildUri(String symbol, LocalDate startDate, LocalDate endDate) {
-    String uriTemplate = "https:api.tiingo.com/tiingo/daily/$SYMBOL/prices?"
+    String uriTemplate = "https://api.tiingo.com/tiingo/daily/$SYMBOL/prices?"
         + "startDate=$STARTDATE&endDate=$ENDDATE&token=$APIKEY";
 
-    String url = uriTemplate.replaceFirst("$SYMBOL", symbol).replaceAll("$STARTDATE", startDate.toString())
-        .replaceAll("$ENDDATE", endDate.toString()).replaceAll("$APIKEY", "0175e650eb18193394fdc2c225b0c0ba954fa0a4");
+    String url = uriTemplate.replace("$SYMBOL", symbol).replace("$STARTDATE", startDate.toString())
+        .replace("$ENDDATE", endDate.toString()).replace("$APIKEY", "0175e650eb18193394fdc2c225b0c0ba954fa0a4");
 
     return url;
   }
