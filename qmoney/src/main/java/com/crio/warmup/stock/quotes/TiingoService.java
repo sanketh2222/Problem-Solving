@@ -16,10 +16,13 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import com.crio.warmup.stock.exception.StockQuoteServiceException;
+
+
 import org.springframework.web.client.RestTemplate;
 
 public class TiingoService implements StockQuotesService {
@@ -31,19 +34,24 @@ public class TiingoService implements StockQuotesService {
   }
 
   @Override
-  public List<Candle> getStockQuote(String symbol, LocalDate from, LocalDate to) throws JsonProcessingException {
+  public List<Candle> getStockQuote(String symbol, LocalDate from, LocalDate to) throws JsonProcessingException, StockQuoteServiceException {
     // TODO Auto-generated method stub
     List<Candle> candle = new ArrayList<>();
     String candles = restTemplate.getForObject(buildUri(symbol, from, to), String.class);
-    System.out.println("successfully");
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.registerModule(new JavaTimeModule());
+
+    if (candles == null) {
+      throw new StockQuoteServiceException("ex occured");
+    }
+    if (candles.contains("Please")){
+      throw new StockQuoteServiceException("ex occured");
+    }
+    ObjectMapper objectMapper = getObjectMapper();
     TiingoCandle[] tiingoCandles = objectMapper.readValue(candles, TiingoCandle[].class);
     for (TiingoCandle tiingoCandle : tiingoCandles) {
       candle.add(tiingoCandle);
     }
     return candle;
-    // return null;
+
   }
 
   private ObjectMapper getObjectMapper() {
@@ -56,24 +64,23 @@ public class TiingoService implements StockQuotesService {
     String uriTemplate = "https://api.tiingo.com/tiingo/daily/$SYMBOL/prices?"
         + "startDate=$STARTDATE&endDate=$ENDDATE&token=$APIKEY";
 
-    String url = uriTemplate.replace("$SYMBOL", symbol).replace("$STARTDATE", startDate.toString())
+    return  uriTemplate.replace("$SYMBOL", symbol).replace("$STARTDATE", startDate.toString())
         .replace("$ENDDATE", endDate.toString()).replace("$APIKEY", "0175e650eb18193394fdc2c225b0c0ba954fa0a4");
 
-    return url;
+
   }
 
   public Double getSellPrice(PortfolioTrade trade, String endDate)
-      throws JsonParseException, JsonMappingException, URISyntaxException, IOException {
+      throws   JsonProcessingException, StockQuoteServiceException {
     List<Candle> candle = getStockQuote(trade.getSymbol(), trade.getPurchaseDate(), LocalDate.parse(endDate));
     return candle.get(candle.size() - 1).getClose();
-    // return null;
+
   }
 
   public Double getBuyPrice(PortfolioTrade trade, String endDate)
-      throws JsonParseException, JsonMappingException, URISyntaxException, IOException {
+      throws  JsonProcessingException, StockQuoteServiceException {
     List<Candle> candle = getStockQuote(trade.getSymbol(), trade.getPurchaseDate(), LocalDate.parse(endDate));
     return candle.get(0).getOpen();
-    // return null;
   }
 
   public static AnnualizedReturn calculateSingleAnnualizedReturns(LocalDate endDate, PortfolioTrade trade,
@@ -87,7 +94,7 @@ public class TiingoService implements StockQuotesService {
     return new AnnualizedReturn(trade.getSymbol(), annualized_returns, totalReturn);
   }
 
-  public List<AnnualizedReturn> calculateAnnualizedReturn(List<PortfolioTrade> portfolioTrades, LocalDate endDate) {
+  public List<AnnualizedReturn> calculateAnnualizedReturn(List<PortfolioTrade> portfolioTrades, LocalDate endDate) throws StockQuoteServiceException {
 
     List<AnnualizedReturn> annualizedReturns = new ArrayList<>();
     for (PortfolioTrade trade : portfolioTrades) {
@@ -98,9 +105,7 @@ public class TiingoService implements StockQuotesService {
         Double sellPrice = getSellPrice(trade, endDate.toString());
         annualizedReturns.add(calculateSingleAnnualizedReturns(endDate, trade, buyPrice, sellPrice));
 
-      } catch (URISyntaxException | IOException e) {
-
-        System.out.println("Exception Occured while finding buy or sell price");
+      } catch (IOException e) {
         e.printStackTrace();
       }
 
@@ -127,5 +132,21 @@ public class TiingoService implements StockQuotesService {
 
   // TODO: CRIO_TASK_MODULE_ADDITIONAL_REFACTOR
   // Write a method to create appropriate url to call the Tiingo API.
+
+
+
+
+
+  // TODO: CRIO_TASK_MODULE_EXCEPTIONS
+  //  1. Update the method signature to match the signature change in the interface.
+  //     Start throwing new StockQuoteServiceException when you get some invalid response from
+  //     Tiingo, or if Tiingo returns empty results for whatever reason, or you encounter
+  //     a runtime exception during Json parsing.
+  //  2. Make sure that the exception propagates all the way from
+  //     PortfolioManager#calculateAnnualisedReturns so that the external user's of our API
+  //     are able to explicitly handle this exception upfront.
+
+  //CHECKSTYLE:OFF
+
 
 }

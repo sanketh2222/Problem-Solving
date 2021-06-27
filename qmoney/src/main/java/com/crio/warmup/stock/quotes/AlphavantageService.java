@@ -7,6 +7,9 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 import com.crio.warmup.stock.dto.AlphavantageCandle;
 import com.crio.warmup.stock.dto.AlphavantageDailyResponse;
 import com.crio.warmup.stock.dto.Candle;
+import com.crio.warmup.stock.dto.AlphavantageDailyResponse;
+import com.crio.warmup.stock.dto.Candle;
+import com.crio.warmup.stock.exception.StockQuoteServiceException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -20,6 +23,9 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.web.client.RestTemplate;
 
 public class AlphavantageService implements StockQuotesService {
@@ -62,13 +68,26 @@ public class AlphavantageService implements StockQuotesService {
   }
 
   @Override
-  public List<Candle> getStockQuote(String symbol, LocalDate from, LocalDate to) {
+  public List<Candle> getStockQuote(String symbol, LocalDate from, LocalDate to) throws StockQuoteServiceException {
 
     List<Candle> candles = new ArrayList<>();
 
     AlphavantageDailyResponse alphavantageDailyResponse = restTemplate.getForObject(buildURI(symbol),
         AlphavantageDailyResponse.class);
-    System.out.println("response is "+alphavantageDailyResponse);
+
+    if (alphavantageDailyResponse == null) {
+      throw new StockQuoteServiceException("No data ");
+    }
+
+    String responses  = restTemplate.getForObject(buildURI(symbol),String.class);
+
+    if (responses == null){
+      throw new StockQuoteServiceException("ex occured");
+    }
+
+    if (responses.contains("Please")){
+      throw new StockQuoteServiceException("ex occured");
+    }
     Map<LocalDate, AlphavantageCandle> dailyresponsemap = alphavantageDailyResponse.getCandles();// Map<LocalDate,AlphavantageCandle>
     for (Map.Entry<LocalDate, AlphavantageCandle> response : dailyresponsemap.entrySet()) {
       if (response.getKey().compareTo(from) >= 0 && response.getKey().compareTo(to) <= 0) {

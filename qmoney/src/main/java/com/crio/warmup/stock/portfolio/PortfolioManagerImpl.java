@@ -1,8 +1,7 @@
 
 package com.crio.warmup.stock.portfolio;
 
-import static java.time.temporal.ChronoUnit.DAYS;
-import static java.time.temporal.ChronoUnit.SECONDS;
+
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -10,21 +9,19 @@ import java.net.URISyntaxException;
 import com.crio.warmup.stock.dto.AnnualizedReturn;
 import com.crio.warmup.stock.dto.Candle;
 import com.crio.warmup.stock.dto.PortfolioTrade;
-import com.crio.warmup.stock.dto.TiingoCandle;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.crio.warmup.stock.exception.StockQuoteServiceException;
 import com.crio.warmup.stock.quotes.StockQuotesService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
 
 import org.springframework.web.client.RestTemplate;
 
@@ -79,7 +76,7 @@ public class PortfolioManagerImpl implements PortfolioManager {
   //  You also have a liberty to completely get rid of that function itself, however, make sure
   //  that you do not delete the #getStockQuote function.
 
-  public List<Candle> getStockQuote(String symbol, LocalDate from, LocalDate to) throws JsonProcessingException {
+  public List<Candle> getStockQuote(String symbol, LocalDate from, LocalDate to) throws JsonProcessingException, StockQuoteServiceException {
 
     //old
     // List<Candle> candle = new ArrayList<>();
@@ -103,17 +100,17 @@ public class PortfolioManagerImpl implements PortfolioManager {
   }
 
   public  Double getSellPrice(PortfolioTrade trade, String endDate)
-      throws JsonParseException, JsonMappingException, URISyntaxException, IOException {
+      throws JsonParseException, JsonMappingException, URISyntaxException, IOException, StockQuoteServiceException {
     List<Candle> candle = getStockQuote(trade.getSymbol(),trade.getPurchaseDate(),LocalDate.parse(endDate));
     return candle.get(candle.size() - 1).getClose();
-    // return null;
+
   }
 
   public  Double getBuyPrice(PortfolioTrade trade, String endDate)
-      throws JsonParseException, JsonMappingException, URISyntaxException, IOException {
+      throws URISyntaxException, StockQuoteServiceException, JsonProcessingException {
     List<Candle> candle = getStockQuote(trade.getSymbol(),trade.getPurchaseDate(),LocalDate.parse(endDate));
     return candle.get(0).getOpen();
-    // return null;
+
   }
 
   public static AnnualizedReturn calculateSingleAnnualizedReturns(LocalDate endDate, PortfolioTrade trade,
@@ -128,7 +125,7 @@ public class PortfolioManagerImpl implements PortfolioManager {
   }
 
   @Override
-  public List<AnnualizedReturn> calculateAnnualizedReturn(List<PortfolioTrade> portfolioTrades, LocalDate endDate) {
+  public List<AnnualizedReturn> calculateAnnualizedReturn(List<PortfolioTrade> portfolioTrades, LocalDate endDate) throws StockQuoteServiceException {
 
     List<AnnualizedReturn> annualizedReturns = new ArrayList<>();
     for (PortfolioTrade trade : portfolioTrades) {
@@ -155,6 +152,7 @@ public class PortfolioManagerImpl implements PortfolioManager {
   private Comparator<AnnualizedReturn> getComparator() {
     return Comparator.comparing(AnnualizedReturn::getAnnualizedReturn).reversed();
   }
+
 
 
 

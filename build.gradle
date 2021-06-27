@@ -147,14 +147,11 @@ task cleanupCrioJars {
     }
 }
 
-
-
 task verifyMavenJarsCreated {
     dependsOn cleanupCrioJars
     dependsOn publishToMavenLocal
     doLast {
         def userHome = System.properties['user.home']
-        // println("home is "+System.properties['myvar'])
         def mavenDir = new File(userHome, '.m2/repository/com/crio/warmup/annual-return/1.0.0')
 
         if (!mavenDir.exists()) {

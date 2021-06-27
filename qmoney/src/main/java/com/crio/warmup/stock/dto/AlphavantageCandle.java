@@ -62,32 +62,5 @@ public class AlphavantageCandle implements Candle {
   }
 
 
-
-
-  // @Override
-  // public Double getOpen() {
-  //   // TODO Auto-generated method stub
-  //   return null;
-  // }
-  // @Override
-  // public Double getClose() {
-  //   // TODO Auto-generated method stub
-  //   return null;
-  // }
-  // @Override
-  // public Double getHigh() {
-  //   // TODO Auto-generated method stub
-  //   return null;
-  // }
-  // @Override
-  // public Double getLow() {
-  //   // TODO Auto-generated method stub
-  //   return null;
-  // }
-  // @Override
-  // public LocalDate getDate() {
-  //   // TODO Auto-generated method stub
-  //   return null;
-  // }
 }
 
