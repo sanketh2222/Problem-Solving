@@ -32,6 +32,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
   private final Double peakHoursServingRadiusInKms = 3.0;
   private final Double normalHoursServingRadiusInKms = 5.0;
+
   @Autowired
   private RestaurantRepositoryService restaurantRepositoryService;
 
@@ -44,8 +45,8 @@ public class RestaurantServiceImpl implements RestaurantService {
       LocalTime currentTime) {
     List<Restaurant> result = new ArrayList<>();
 
-    if (currentTime.getHour() >= 8 || currentTime.getHour() <= 10 || currentTime.getHour() >= 13
-        || currentTime.getHour() <= 14 || currentTime.getHour() >= 19 || currentTime.getHour() <= 21) {
+    if (currentTime.getHour() >= 8 && currentTime.getHour() <= 10 || currentTime.getHour() >= 1
+        && currentTime.getHour() <= 2 || currentTime.getHour() >= 7 && currentTime.getHour() <= 9) {
       result = restaurantRepositoryService.findAllRestaurantsCloseBy(getRestaurantsRequest.getLatitude(),
           getRestaurantsRequest.getLongitude(), currentTime, peakHoursServingRadiusInKms);
     } else {

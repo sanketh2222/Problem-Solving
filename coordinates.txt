@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 latitude=12.9208197
 longitude=74.83900469999999
+=======
+latitude=11.7
+longitude=77.9
+>>>>>>> e447b879133623ecfa9f7dda3777b4ee392ccea9

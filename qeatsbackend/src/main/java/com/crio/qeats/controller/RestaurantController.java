@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,38 +69,17 @@ public class RestaurantController {
     return ResponseEntity.ok().body(getRestaurantsResponse);
   }
 
-  // TIP(MODULE_MENUAPI): Model Implementation for getting menu given a
-  // restaurantId.
-  // Get the Menu for the given restaurantId
-  // API URI: /qeats/v1/menu?restaurantId=11
-  // Method: GET
-  // Query Params: restaurantId
-  // Success Output:
-  // 1). If restaurantId is present return Menu
-  // 2). Otherwise respond with BadHttpRequest.
-  //
-  // HTTP Code: 200
-  // {
-  // "menu": {
-  // "items": [
-  // {
-  // "attributes": [
-  // "South Indian"
-  // ],
-  // "id": "1",
-  // "imageUrl": "www.google.com",
-  // "itemId": "10",
-  // "name": "Idly",
-  // "price": 45
-  // }
-  // ],
-  // "restaurantId": "11"
-  // }
-  // }
-  // Error Response:
-  // HTTP Code: 4xx, if client side error.
-  // : 5xx, if server side error.
-  // Eg:
-  // curl -X GET "http://localhost:8081/qeats/v1/menu?restaurantId=11"
+
+
+
+
+
+
+
+
+
+
+
 
 }
+
