@@ -19,6 +19,7 @@ import com.crio.qeats.dto.Restaurant;
 import com.crio.qeats.exchanges.GetRestaurantsRequest;
 import com.crio.qeats.exchanges.GetRestaurantsResponse;
 import com.crio.qeats.repositoryservices.RestaurantRepositoryService;
+import com.crio.qeats.repositoryservices.RestaurantRepositoryServiceImpl;
 import com.crio.qeats.utils.FixtureHelpers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,10 +46,13 @@ import org.springframework.test.context.ActiveProfiles;
 class RestaurantServiceTest {
 
   private static final String FIXTURES = "fixtures/exchanges";
+  
   @InjectMocks
   private RestaurantServiceImpl restaurantService;
+
   @MockBean
   private RestaurantRepositoryService restaurantRepositoryServiceMock;
+
   private ObjectMapper objectMapper;
 
   @BeforeEach

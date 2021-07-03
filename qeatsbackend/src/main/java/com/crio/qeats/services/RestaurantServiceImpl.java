@@ -23,17 +23,19 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
-// @Log4j2
 public class RestaurantServiceImpl implements RestaurantService {
 
   private final Double peakHoursServingRadiusInKms = 3.0;
   private final Double normalHoursServingRadiusInKms = 5.0;
 
   @Autowired
+  @Qualifier("restaurantRepositoryServiceImpl")
   private RestaurantRepositoryService restaurantRepositoryService;
 
 
@@ -63,6 +65,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     if (getRestaurantsRequest.getLatitude() == null || getRestaurantsRequest.getLongitude() == null){
       // throw new InvalidRequest(HttpStatus.BAD_REQUEST,"error");
       isValid = false;
+      return isValid;
     }
     if (getRestaurantsRequest.getLongitude() < -180 || getRestaurantsRequest.getLongitude() > 180){
       isValid =false;
