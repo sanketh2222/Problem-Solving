@@ -101,10 +101,6 @@ public class RestaurantRepositoryServiceImpl implements RestaurantRepositoryServ
 
 
 
-  // TODO: CRIO_TASK_MODULE_NOSQL
-  // Objective:
-  // 1. Check if a restaurant is nearby and open. If so, it is a candidate to be returned.
-  // NOTE: How far exactly is "nearby"?
 
   /**
    * Utility method to check if a restaurant is within the serving radius at a given time.
