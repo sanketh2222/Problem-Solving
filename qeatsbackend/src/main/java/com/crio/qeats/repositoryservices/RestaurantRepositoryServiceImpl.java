@@ -39,7 +39,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @Slf4j
 @Primary
@@ -47,7 +46,6 @@ public class RestaurantRepositoryServiceImpl implements RestaurantRepositoryServ
 
   @Autowired
   private RestaurantRepository restaurantRepository;
-
 
   @Autowired
   private MongoTemplate mongoTemplate;
@@ -67,57 +65,49 @@ public class RestaurantRepositoryServiceImpl implements RestaurantRepositoryServ
   // 1. Implement findAllRestaurantsCloseby.
   // 2. Remember to keep the precision of GeoHash in mind while using it as a key.
   // Check RestaurantRepositoryService.java file for the interface contract.
-  public List<Restaurant> findAllRestaurantsCloseBy(Double latitude,
-      Double longitude, LocalTime currentTime, Double servingRadiusInKms) {
+  public List<Restaurant> findAllRestaurantsCloseBy(Double latitude, Double longitude, LocalTime currentTime,
+      Double servingRadiusInKms) {
 
     List<Restaurant> restaurants = new ArrayList<>();
     List<RestaurantEntity> restaurantEntitiesList = null;
-    ModelMapper modelMapper = modelMapperProvider.get(); 
+    ModelMapper modelMapper = modelMapperProvider.get();
+    long start = System.currentTimeMillis();
+    // log.info("calling find all ...");
+    restaurantEntitiesList = restaurantRepository.findAll();
+    long total = System.currentTimeMillis() - start;
+    log.info("total time is " + total);
 
-    restaurantEntitiesList  = restaurantRepository.findAll();
-
-    for (RestaurantEntity restaurantEntity : restaurantEntitiesList){
-      if (isRestaurantCloseByAndOpen(restaurantEntity,currentTime,latitude,longitude,servingRadiusInKms)){
+    for (RestaurantEntity restaurantEntity : restaurantEntitiesList) {
+      if (isRestaurantCloseByAndOpen(restaurantEntity, currentTime, latitude, longitude, servingRadiusInKms)) {
         restaurants.add(modelMapper.map(restaurantEntity, Restaurant.class));
       }
-      
+
     }
 
-    log.info("data is "+restaurantEntitiesList.size());
+    // log.info("data is " + restaurantEntitiesList.size());
     // mongoTemplate.findAll(entityClass, collectionName)
 
-
-      //CHECKSTYLE:OFF
-      //CHECKSTYLE:ON
-
+    // CHECKSTYLE:OFF
+    // CHECKSTYLE:ON
 
     return restaurants;
   }
 
-
-
-
-
-
-
-
-
   /**
-   * Utility method to check if a restaurant is within the serving radius at a given time.
-   * @return boolean True if restaurant falls within serving radius and is open, false otherwise
+   * Utility method to check if a restaurant is within the serving radius at a
+   * given time.
+   * 
+   * @return boolean True if restaurant falls within serving radius and is open,
+   *         false otherwise
    */
-  private boolean isRestaurantCloseByAndOpen(RestaurantEntity restaurantEntity,
-      LocalTime currentTime, Double latitude, Double longitude, Double servingRadiusInKms) {
+  private boolean isRestaurantCloseByAndOpen(RestaurantEntity restaurantEntity, LocalTime currentTime, Double latitude,
+      Double longitude, Double servingRadiusInKms) {
     if (isOpenNow(currentTime, restaurantEntity)) {
-      return GeoUtils.findDistanceInKm(latitude, longitude,
-          restaurantEntity.getLatitude(), restaurantEntity.getLongitude())
-          < servingRadiusInKms;
+      return GeoUtils.findDistanceInKm(latitude, longitude, restaurantEntity.getLatitude(),
+          restaurantEntity.getLongitude()) < servingRadiusInKms;
     }
 
     return false;
   }
 
-
-
 }
-
